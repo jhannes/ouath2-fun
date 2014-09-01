@@ -1,0 +1,8 @@
+maven-eclipse.xml
+target
+.settings
+.classpath
+.profile
+.externalToolBuilders
+dependency-reduced-pom.xml
+/oauth2-fun-ident/oauth2.ident.properties

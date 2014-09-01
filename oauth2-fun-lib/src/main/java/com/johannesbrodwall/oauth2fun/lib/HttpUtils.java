@@ -1,0 +1,55 @@
+package com.johannesbrodwall.oauth2fun.lib;
+
+import com.eclipsesource.json.JsonObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
+public class HttpUtils {
+
+    public static JsonObject executeJsonPostRequest(URL requestUrl, String payload) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
+        connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        connection.setDoOutput(true);
+        connection.setRequestMethod("POST");
+        try (Writer writer = new OutputStreamWriter(connection.getOutputStream())) {
+            writer.write(payload);
+        }
+        if (connection.getResponseCode() < 400) {
+            try (InputStream inputStream = connection.getInputStream() ) {
+                return JsonObject.readFrom(slurp(inputStream));
+            }
+        } else {
+            try (InputStream inputStream = connection.getErrorStream() ) {
+                throw new RuntimeException("Request to " + requestUrl + " failed: " + slurp(inputStream));
+            }
+        }
+    }
+
+    public static String slurp(InputStream inputStream) {
+        return new BufferedReader(new InputStreamReader(inputStream)).lines()
+            .reduce((a, b) -> a + b)
+            .get();
+    }
+
+    public static String executeStringGetRequest(URL requestUrl) throws IOException {
+        HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
+        connection.setRequestMethod("GET");
+        if (connection.getResponseCode() < 400) {
+            try (InputStream inputStream = connection.getInputStream() ) {
+                return slurp(inputStream);
+            }
+        } else {
+            try (InputStream inputStream = connection.getErrorStream() ) {
+                throw new RuntimeException("Request to " + requestUrl + " failed: " + slurp(inputStream));
+            }
+        }
+    }
+
+}
