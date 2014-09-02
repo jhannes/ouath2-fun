@@ -8,6 +8,8 @@ import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.webapp.WebInfConfiguration;
 import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
+import java.net.URL;
+
 public class ApplicationServer {
 
     private Server server;
@@ -18,10 +20,18 @@ public class ApplicationServer {
         server.setHandler(handlers);
     }
 
-    private WebAppContext createWebAppContext() {
-        WebAppContext webapp = new WebAppContext("", "");
-        webapp.setContextPath("/");
-        webapp.setWar(getClass().getResource("/webapp").toExternalForm());
+    private WebAppContext createTestWebAppContext() {
+        WebAppContext webAppContext = new WebAppContext("src/main/webapp", "/");
+        webAppContext.setInitParameter("org.eclipse.jetty.servlet.Default.useFileMappedBuffer", "false");
+        webAppContext.setConfigurations(new Configuration[] {
+                new WebInfConfiguration(), new WebXmlConfiguration(),
+        });
+        return webAppContext;
+    }
+
+    private WebAppContext createProductionWebAppContext() {
+        String war = getClass().getResource("/webapp").toExternalForm();
+        WebAppContext webapp = new WebAppContext(war, "/");
         webapp.setConfigurations(new Configuration[] {
                 new WebInfConfiguration(), new WebXmlConfiguration(),
         });
@@ -34,23 +44,17 @@ public class ApplicationServer {
         server.start();
     }
 
+    private WebAppContext createWebAppContext() {
+        URL webAppUrl = getClass().getResource("/webapp");
+        if (webAppUrl.getProtocol().equals("jar")) {
+            return createProductionWebAppContext();
+        } else {
+            return createTestWebAppContext();
+        }
+    }
+
     private ShutdownHandler shutdownHandler() {
         return new ShutdownHandler("sdgsdgs", false, true);
-    }
-
-    protected void startTest() throws Exception {
-        handlers.addHandler(shutdownHandler());
-        handlers.addHandler(createTestWebAppContext());
-        server.start();
-    }
-
-    private WebAppContext createTestWebAppContext() {
-        WebAppContext webAppContext = new WebAppContext("src/main/webapp", "/");
-        webAppContext.setInitParameter("org.eclipse.jetty.servlet.Default.useFileMappedBuffer", "false");
-        webAppContext.setConfigurations(new Configuration[] {
-                new WebInfConfiguration(), new WebXmlConfiguration(),
-        });
-        return webAppContext;
     }
 
 }
