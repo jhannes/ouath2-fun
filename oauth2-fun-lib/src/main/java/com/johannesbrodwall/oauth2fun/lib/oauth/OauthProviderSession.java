@@ -7,12 +7,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Base64;
 
+import lombok.Getter;
 import lombok.Setter;
 
 public class OauthProviderSession {
 
     protected final OAuthProvider provider;
 
+    @Getter
     protected String username;
 
     @Setter

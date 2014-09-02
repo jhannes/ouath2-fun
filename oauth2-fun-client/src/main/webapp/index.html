@@ -1,0 +1,43 @@
+<!doctype html>
+<html>
+<head>
+	<title>OAuth 2 Demo</title>
+	<style>
+.error { color: red; }
+	</style>
+</head>
+
+<body>
+	<h1>OAuth 2 client application</h1>
+
+
+	<div id="userinfo"></div>
+	
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/html" id="authenticatedTemplate">
+<li>
+	Logged in as <%= username %>
+</li>
+</script>
+<script type="text/html" id="loginTemplate">
+<li>Not logged in:  <a href="<%= loginUrl %>">Login</a></li></li>
+</script>
+    <script>
+$(function() {
+	var authenticatedTemplate = _.template($("#authenticatedTemplate").text());
+	var loginTemplate = _.template($("#loginTemplate").text());
+	$.getJSON("/userinfo", function(data) {
+		
+		$("#userinfo").empty();
+		if (data.username) {
+			$("#userinfo").append(authenticatedTemplate(data));			
+		} else {
+			$("#userinfo").append(loginTemplate(data));			
+		}
+	});
+});
+    </script>
+</body>
+</html>

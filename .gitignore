@@ -6,3 +6,5 @@ target
 .externalToolBuilders
 dependency-reduced-pom.xml
 /oauth2-fun-ident/oauth2.ident.properties
+/oauth2-fun-client/oauth2.ident.properties
+/oauth2.ident.properties

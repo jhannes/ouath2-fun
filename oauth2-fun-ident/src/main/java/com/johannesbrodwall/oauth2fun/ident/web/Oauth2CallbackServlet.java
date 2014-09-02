@@ -22,7 +22,11 @@ public class Oauth2CallbackServlet extends HttpServlet {
 
         try {
             providerSession.fetchAuthToken(req.getParameter("code"), getRedirectUri(req));
-            resp.sendRedirect("/");
+
+            String pendingRedirectUri = userSession.takePendingRedirectUri();
+            String redirect = pendingRedirectUri != null ? pendingRedirectUri : "/";
+
+            resp.sendRedirect(redirect);
         } catch (Exception e) {
             log.warn(req.getParameter("state") + " callback failed", e);
             providerSession.setErrorMessage("Unexpected error: " + e);

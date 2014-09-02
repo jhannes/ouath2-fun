@@ -4,26 +4,16 @@
        http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
   version="3.0">
 
-  <module-name>Oauth2 fun ident</module-name>
-
-  <servlet>
-    <servlet-name>oauthProviderServlet</servlet-name>
-    <servlet-class>com.johannesbrodwall.oauth2fun.ident.web.OauthProviderServlet</servlet-class>
-  </servlet>
+  <module-name>Oauth2 fun client</module-name>
 
   <servlet>
     <servlet-name>userinfoServlet</servlet-name>
-    <servlet-class>com.johannesbrodwall.oauth2fun.ident.web.UserinfoServlet</servlet-class>
-  </servlet>
-
-  <servlet>
-    <servlet-name>fetchProfileServlet</servlet-name>
-    <servlet-class>com.johannesbrodwall.oauth2fun.ident.web.FetchProfileServlet</servlet-class>
+    <servlet-class>com.johannesbrodwall.oauth2fun.client.web.UserinfoServlet</servlet-class>
   </servlet>
 
   <servlet>
     <servlet-name>oauth2callbackServlet</servlet-name>
-    <servlet-class>com.johannesbrodwall.oauth2fun.ident.web.Oauth2CallbackServlet</servlet-class>
+    <servlet-class>com.johannesbrodwall.oauth2fun.client.web.Oauth2CallbackServlet</servlet-class>
   </servlet>
 
   <servlet>
@@ -32,23 +22,8 @@
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>oauthProviderServlet</servlet-name>
-    <url-pattern>/auth</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>oauthProviderServlet</servlet-name>
-    <url-pattern>/token</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
     <servlet-name>oauth2callbackServlet</servlet-name>
     <url-pattern>/oauth2callback</url-pattern>
-  </servlet-mapping>
-
-  <servlet-mapping>
-    <servlet-name>fetchProfileServlet</servlet-name>
-    <url-pattern>/fetchProfile</url-pattern>
   </servlet-mapping>
 
   <servlet-mapping>

@@ -10,15 +10,15 @@
       <artifactId>oauth2-fun-lib</artifactId>
       <version>1.0.0</version>
     </dependency>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.14.4</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>
-    <resources>
-      <resource>
-        <targetPath>webapp</targetPath>
-        <directory>${basedir}/src/main/webapp</directory>
-      </resource>
-    </resources>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -31,14 +31,13 @@
             </goals>
             <configuration>
               <transformers>
-                <transformer
-                  implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
                   <mainClass>com.johannesbrodwall.oauth2fun.client.ClientApplicationServer
                   </mainClass>
                 </transformer>
-                <transformer
-                  implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
-                  <resource>src/main/webapp</resource>
+                <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
+                  <resource>src/main/</resource>
+                  <file>webapp/</file>
                 </transformer>
               </transformers>
             </configuration>
