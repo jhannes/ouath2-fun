@@ -1,25 +1,20 @@
-package com.johannesbrodwall.oauth2fun.ident;
+package com.johannesbrodwall.oauth2fun.lib.oauth;
 
 import com.eclipsesource.json.JsonObject;
-import com.johannesbrodwall.oauth2fun.lib.HttpUtils;
 
-import java.io.IOException;
-import java.net.URL;
 import java.net.URLEncoder;
-import java.util.Base64;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
-import lombok.Value;
 
 public class OAuthProvider {
 
     private String getProperty(String property, String defaultValue) {
-        return IdentAppConfiguration.getProperty("oauth2." + providerName + "." + property, defaultValue);
+        return OauthConfiguration.getProperty("oauth2." + providerName + "." + property, defaultValue);
     }
 
     private String getRequiredProperty(String property) {
-        return IdentAppConfiguration.getRequiredProperty("oauth2." + providerName + "." + property);
+        return OauthConfiguration.getRequiredProperty("oauth2." + providerName + "." + property);
     }
 
 
@@ -66,7 +61,7 @@ public class OAuthProvider {
         return getProperty("authUrl", null);
     }
 
-    protected String getTokenUrl() {
+    public String getTokenUrl() {
         return getRequiredProperty("tokenUrl");
     }
 
@@ -78,23 +73,12 @@ public class OAuthProvider {
                 + "grant_type=authorization_code");
     }
 
-    @Value
-    static class TokenResponse {
-        private String username;
-        private String authToken;
-    }
-
-    protected TokenResponse fetchToken(String code, String redirectUri) throws IOException {
-        JsonObject tokenResponse = HttpUtils.executeJsonPostRequest(new URL(getTokenUrl()),
-                getTokenRequestPayload(code, redirectUri));
-        String idToken = tokenResponse.get("id_token").asString();
-        JsonObject payload = JsonObject.readFrom(new String(Base64.getDecoder().decode(idToken.split("\\.")[1])));
-        String username = payload.get("email").asString();
-
-        return new TokenResponse(username, tokenResponse.get("access_token").asString());
-    }
-
-    public String fetchProfile(String accessToken) throws IOException {
-        return null;
+    public JsonObject toJSON(String redirectUri) {
+        JsonObject result = new JsonObject();
+        result.set("providerName", getProviderName());
+        result.set("displayName", getDisplayName());
+        result.set("clientSignup", getClientSignup());
+        result.set("url", getUrl(redirectUri));
+        return result;
     }
 }

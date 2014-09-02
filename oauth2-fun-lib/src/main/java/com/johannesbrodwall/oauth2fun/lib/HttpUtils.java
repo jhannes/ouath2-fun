@@ -10,6 +10,8 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HttpUtils {
 
@@ -50,6 +52,16 @@ public class HttpUtils {
                 throw new RuntimeException("Request to " + requestUrl + " failed: " + slurp(inputStream));
             }
         }
+    }
+
+    public static Map<String, String> parseQuery(String response) {
+        String[] propertyValues = response.split("&");
+        Map<String,String> properties = new HashMap<String, String>();
+        for (String property : propertyValues) {
+            properties.put(property.substring(0, property.indexOf('=')),
+                    property.substring(property.indexOf('=') + 1));
+        }
+        return properties;
     }
 
 }

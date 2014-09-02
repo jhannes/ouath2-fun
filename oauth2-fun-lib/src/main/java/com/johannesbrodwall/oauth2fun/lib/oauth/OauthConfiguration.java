@@ -1,4 +1,4 @@
-package com.johannesbrodwall.oauth2fun.ident;
+package com.johannesbrodwall.oauth2fun.lib.oauth;
 
 import com.johannesbrodwall.oauth2fun.lib.AppConfiguration;
 
@@ -7,11 +7,11 @@ import java.io.File;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class IdentAppConfiguration extends AppConfiguration {
+public class OauthConfiguration extends AppConfiguration {
 
-    private static IdentAppConfiguration instance = new IdentAppConfiguration("oauth2.ident.properties");
+    private static OauthConfiguration instance = new OauthConfiguration("oauth2.ident.properties");
 
-    public IdentAppConfiguration(String filename) {
+    public OauthConfiguration(String filename) {
         file = new File(filename);
     }
 

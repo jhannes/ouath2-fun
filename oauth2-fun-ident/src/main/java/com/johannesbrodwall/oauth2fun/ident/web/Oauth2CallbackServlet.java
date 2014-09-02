@@ -1,7 +1,7 @@
 package com.johannesbrodwall.oauth2fun.ident.web;
 
-import com.johannesbrodwall.oauth2fun.ident.OAuthProviderSession;
 import com.johannesbrodwall.oauth2fun.ident.UserSession;
+import com.johannesbrodwall.oauth2fun.lib.oauth.OauthProviderSession;
 
 import java.io.IOException;
 
@@ -18,7 +18,7 @@ public class Oauth2CallbackServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         UserSession userSession = getUserSession(req);
-        OAuthProviderSession providerSession = userSession.getProviderSessions().get(req.getParameter("state"));
+        OauthProviderSession providerSession = userSession.getProviderSessions().get(req.getParameter("state"));
 
         try {
             providerSession.fetchAuthToken(req.getParameter("code"), getRedirectUri(req));
