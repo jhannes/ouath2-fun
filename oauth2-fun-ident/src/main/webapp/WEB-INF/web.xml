@@ -8,17 +8,17 @@
 
   <servlet>
     <servlet-name>userinfoServlet</servlet-name>
-    <servlet-class>com.johannesbrodwall.oauth2fun.ident.UserinfoServlet</servlet-class>
+    <servlet-class>com.johannesbrodwall.oauth2fun.ident.web.UserinfoServlet</servlet-class>
   </servlet>
 
   <servlet>
     <servlet-name>fetchProfileServlet</servlet-name>
-    <servlet-class>com.johannesbrodwall.oauth2fun.ident.FetchProfileServlet</servlet-class>
+    <servlet-class>com.johannesbrodwall.oauth2fun.ident.web.FetchProfileServlet</servlet-class>
   </servlet>
 
   <servlet>
     <servlet-name>oauth2callbackServlet</servlet-name>
-    <servlet-class>com.johannesbrodwall.oauth2fun.ident.Oauth2CallbackServlet</servlet-class>
+    <servlet-class>com.johannesbrodwall.oauth2fun.ident.web.Oauth2CallbackServlet</servlet-class>
   </servlet>
 
   <servlet>
