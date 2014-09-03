@@ -34,7 +34,7 @@ public class HttpUtils {
         }
     }
 
-    public static String slurp(InputStream inputStream) {
+    private static String slurp(InputStream inputStream) {
         return new BufferedReader(new InputStreamReader(inputStream)).lines()
             .reduce((a, b) -> a + b)
             .get();

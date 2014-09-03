@@ -31,7 +31,6 @@ public class OauthProviderServlet extends HttpServlet {
             return;
         }
 
-
         resp.sendRedirect("/");
     }
 

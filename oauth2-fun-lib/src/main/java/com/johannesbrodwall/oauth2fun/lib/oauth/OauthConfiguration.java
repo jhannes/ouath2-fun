@@ -6,16 +6,15 @@ import java.io.File;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
-public class OauthConfiguration extends AppConfiguration {
+@Slf4j class OauthConfiguration extends AppConfiguration {
 
     private static OauthConfiguration instance = new OauthConfiguration("oauth2.ident.properties");
 
-    public OauthConfiguration(String filename) {
+    private OauthConfiguration(String filename) {
         file = new File(filename);
     }
 
-    public static String getRequiredProperty(String propertyName) {
+    static String getRequiredProperty(String propertyName) {
         String result = instance.getProperty(propertyName);
         if (result == null) {
             throw new RuntimeException("Missing property " + propertyName);
@@ -23,7 +22,7 @@ public class OauthConfiguration extends AppConfiguration {
         return result;
     }
 
-    public static String getProperty(String propertyName, String defaultValue) {
+    static String getProperty(String propertyName, String defaultValue) {
         String result = instance.getProperty(propertyName);
         if (result == null) {
             log.debug("Missing property {} in {}", propertyName);

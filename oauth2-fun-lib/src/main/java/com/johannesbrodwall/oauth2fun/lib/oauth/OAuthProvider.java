@@ -21,7 +21,7 @@ public class OAuthProvider {
     @Getter
     private String providerName;
 
-    public OAuthProvider(String providerName) {
+    OAuthProvider(String providerName) {
         this.providerName = providerName;
     }
 
@@ -34,7 +34,7 @@ public class OAuthProvider {
     }
 
     @SneakyThrows
-    public String getUrl(String redirectUrl) {
+    private String getUrl(String redirectUrl) {
         if (getClientId() == null || getAuthUrl() == null) return null;
 
         return getAuthUrl() + "?"
@@ -65,7 +65,7 @@ public class OAuthProvider {
         return getRequiredProperty("tokenUrl");
     }
 
-    public String getTokenRequestPayload(String code, String redirectUri) {
+    String getTokenRequestPayload(String code, String redirectUri) {
         return ("code=" + code + "&"
                 + "client_id=" + getClientId() + "&"
                 + "client_secret=" + getClientSecret() + "&"
@@ -73,7 +73,7 @@ public class OAuthProvider {
                 + "grant_type=authorization_code");
     }
 
-    public JsonObject toJSON(String redirectUri) {
+    JsonObject toJSON(String redirectUri) {
         JsonObject result = new JsonObject();
         result.set("providerName", getProviderName());
         result.set("displayName", getDisplayName());
