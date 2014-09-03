@@ -20,24 +20,6 @@ public class ApplicationServer {
         server.setHandler(handlers);
     }
 
-    private WebAppContext createTestWebAppContext() {
-        WebAppContext webAppContext = new WebAppContext("src/main/webapp", "/");
-        webAppContext.setInitParameter("org.eclipse.jetty.servlet.Default.useFileMappedBuffer", "false");
-        webAppContext.setConfigurations(new Configuration[] {
-                new WebInfConfiguration(), new WebXmlConfiguration(),
-        });
-        return webAppContext;
-    }
-
-    private WebAppContext createProductionWebAppContext() {
-        String war = getClass().getResource("/webapp").toExternalForm();
-        WebAppContext webapp = new WebAppContext(war, "/");
-        webapp.setConfigurations(new Configuration[] {
-                new WebInfConfiguration(), new WebXmlConfiguration(),
-        });
-        return webapp;
-    }
-
     public void start() throws Exception {
         handlers.addHandler(shutdownHandler());
         handlers.addHandler(createWebAppContext());
@@ -45,12 +27,21 @@ public class ApplicationServer {
     }
 
     private WebAppContext createWebAppContext() {
+        WebAppContext webapp = new WebAppContext();
+        webapp.setContextPath("/");
+
         URL webAppUrl = getClass().getResource("/webapp");
         if (webAppUrl.getProtocol().equals("jar")) {
-            return createProductionWebAppContext();
+            webapp.setWar(webAppUrl.toExternalForm());
         } else {
-            return createTestWebAppContext();
+            webapp.setWar("src/main/webapp");
+            // Avoid locking static content when running exploded
+            webapp.setInitParameter("org.eclipse.jetty.servlet.Default.useFileMappedBuffer", "false");
         }
+        webapp.setConfigurations(new Configuration[] {
+                new WebInfConfiguration(), new WebXmlConfiguration(),
+        });
+        return webapp;
     }
 
     private ShutdownHandler shutdownHandler() {
