@@ -36,11 +36,6 @@
                   <mainClass>com.johannesbrodwall.oauth2fun.ident.IdentApplicationServer
                   </mainClass>
                 </transformer>
-                <transformer
-                  implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
-                  <resource>src/main</resource>
-                  <file>webapp</file>
-                </transformer>
               </transformers>
             </configuration>
           </execution>

@@ -35,10 +35,6 @@
                   <mainClass>com.johannesbrodwall.oauth2fun.client.ClientApplicationServer
                   </mainClass>
                 </transformer>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.IncludeResourceTransformer">
-                  <resource>src/main/</resource>
-                  <file>webapp/</file>
-                </transformer>
               </transformers>
             </configuration>
           </execution>
