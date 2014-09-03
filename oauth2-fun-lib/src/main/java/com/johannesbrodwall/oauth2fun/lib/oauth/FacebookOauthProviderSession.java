@@ -7,9 +7,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Map;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class FacebookOauthProviderSession extends OauthProviderSession {
 
     public FacebookOauthProviderSession() {
@@ -22,8 +19,6 @@ public class FacebookOauthProviderSession extends OauthProviderSession {
         URL requestUrl = new URL(provider.getTokenUrl() + "?" +
                 provider.getTokenRequestPayload(code, redirectUri));
         String response = HttpUtils.executeStringGetRequest(requestUrl);
-        log.debug("fetchToken {} -> {}", requestUrl, response);
-
         Map<String, String> properties = HttpUtils.parseQuery(response);
         accessToken = properties.get("access_token");
     }

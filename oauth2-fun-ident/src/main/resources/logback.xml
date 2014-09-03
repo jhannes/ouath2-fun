@@ -9,6 +9,9 @@
   </appender>
 
   <logger name="com.johannesbrodwall" level="debug" />
+  
+  <logger name="org.eclipse.jetty" level="warn" />
+  
   <root level="info">
     <appender-ref ref="STDOUT" />
   </root>

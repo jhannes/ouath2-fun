@@ -16,10 +16,6 @@ public class AppConfiguration {
     private Properties properties = new Properties();
     protected File file;
 
-    public AppConfiguration() {
-        super();
-    }
-
     protected String getProperty(String propertyName) {
         ensureConfigurationIsFresh();
         return properties.getProperty(propertyName);
@@ -28,11 +24,11 @@ public class AppConfiguration {
     private void ensureConfigurationIsFresh() {
         if (System.currentTimeMillis() < nextCheckTime) return;
         nextCheckTime = System.currentTimeMillis() + 10000;
-        log.debug("Rechecking {}", file);
+        log.trace("Rechecking {}", file);
 
         if (lastLoadTime >= file.lastModified()) return;
         lastLoadTime = file.lastModified();
-        log.info("Reloading {}", file);
+        log.debug("Reloading {}", file);
 
         try (FileInputStream inputStream = new FileInputStream(file)) {
             properties.clear();

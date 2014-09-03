@@ -2,6 +2,7 @@ package com.johannesbrodwall.oauth2fun.ident.web;
 
 import com.eclipsesource.json.JsonObject;
 import com.johannesbrodwall.oauth2fun.ident.UserSession;
+import com.johannesbrodwall.oauth2fun.lib.ServletUtils;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -20,7 +21,7 @@ public class OauthProviderServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UserSession userSession = getUserSession(req);
+        UserSession userSession = ServletUtils.getSessionObject(UserSession.class, req);
 
         String clientId = req.getParameter("client_id");
         String code = userSession.startClientSession(clientId, req.getParameter("redirect_uri"));
@@ -60,16 +61,6 @@ public class OauthProviderServlet extends HttpServlet {
         try (PrintWriter writer = resp.getWriter()) {
             response.writeTo(writer);
         }
-    }
-
-
-    private UserSession getUserSession(HttpServletRequest req) {
-        UserSession userSession = (UserSession) req.getSession().getAttribute("userSession");
-        if (userSession == null) {
-            userSession = new UserSession();
-            req.getSession().setAttribute("userSession", userSession);
-        }
-        return userSession;
     }
 
 }

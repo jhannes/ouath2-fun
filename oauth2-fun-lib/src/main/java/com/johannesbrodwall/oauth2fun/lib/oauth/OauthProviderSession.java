@@ -9,7 +9,9 @@ import java.util.Base64;
 
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class OauthProviderSession {
 
     protected final OAuthProvider provider;
@@ -35,7 +37,9 @@ public class OauthProviderSession {
                 new URL(provider.getTokenUrl()),
                 provider.getTokenRequestPayload(code, redirectUri));
         String idToken = tokenResponse.get("id_token").asString();
-        JsonObject payload = JsonObject.readFrom(new String(Base64.getDecoder().decode(idToken.split("\\.")[1])));
+        String idTokenPayload = new String(Base64.getDecoder().decode(idToken.split("\\.")[1]));
+        log.info("ID token: {}", idTokenPayload);
+        JsonObject payload = JsonObject.readFrom(idTokenPayload);
         username = payload.get("email").asString();
         accessToken = tokenResponse.get("access_token").asString();
     }

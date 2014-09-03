@@ -10,6 +10,9 @@ import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
 import java.net.URL;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class ApplicationServer {
 
     private Server server;
@@ -24,6 +27,8 @@ public class ApplicationServer {
         handlers.addHandler(shutdownHandler());
         handlers.addHandler(createWebAppContext());
         server.start();
+
+        log.info("Started " + server.getURI());
     }
 
     private WebAppContext createWebAppContext() {

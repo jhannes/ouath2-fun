@@ -13,9 +13,14 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class HttpUtils {
 
     public static JsonObject executeJsonPostRequest(URL requestUrl, String payload) throws IOException {
+        log.info("{}\n\tRequest:{}", requestUrl, payload);
+
         HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
         connection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
         connection.setDoOutput(true);
@@ -25,7 +30,9 @@ public class HttpUtils {
         }
         if (connection.getResponseCode() < 400) {
             try (InputStream inputStream = connection.getInputStream() ) {
-                return JsonObject.readFrom(slurp(inputStream));
+                String response = slurp(inputStream);
+                log.info("{}\n\tResponse:{}", requestUrl, response);
+                return JsonObject.readFrom(response);
             }
         } else {
             try (InputStream inputStream = connection.getErrorStream() ) {
@@ -41,11 +48,14 @@ public class HttpUtils {
     }
 
     public static String executeStringGetRequest(URL requestUrl) throws IOException {
+        log.info(requestUrl.toString());
         HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
         connection.setRequestMethod("GET");
         if (connection.getResponseCode() < 400) {
             try (InputStream inputStream = connection.getInputStream() ) {
-                return slurp(inputStream);
+                String response = slurp(inputStream);
+                log.info("{}\n\tResponse:{}", requestUrl, response);
+                return response;
             }
         } else {
             try (InputStream inputStream = connection.getErrorStream() ) {
@@ -63,5 +73,4 @@ public class HttpUtils {
         }
         return properties;
     }
-
 }

@@ -1,6 +1,7 @@
 package com.johannesbrodwall.oauth2fun.ident.web;
 
 import com.johannesbrodwall.oauth2fun.ident.UserSession;
+import com.johannesbrodwall.oauth2fun.lib.ServletUtils;
 import com.johannesbrodwall.oauth2fun.lib.oauth.OauthProviderSession;
 
 import java.io.IOException;
@@ -17,11 +18,14 @@ public class Oauth2CallbackServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        UserSession userSession = getUserSession(req);
+        log.info(ServletUtils.getRequestUrl(req));
+
+        UserSession userSession = ServletUtils.getSessionObject(UserSession.class, req);
         OauthProviderSession providerSession = userSession.getProviderSessions().get(req.getParameter("state"));
 
         try {
-            providerSession.fetchAuthToken(req.getParameter("code"), getRedirectUri(req));
+            String redirectUri = ServletUtils.getContextUrl(req) + "/oauth2callback";
+            providerSession.fetchAuthToken(req.getParameter("code"), redirectUri);
 
             String pendingRedirectUri = userSession.takePendingRedirectUri();
             String redirect = pendingRedirectUri != null ? pendingRedirectUri : "/";
@@ -32,14 +36,5 @@ public class Oauth2CallbackServlet extends HttpServlet {
             providerSession.setErrorMessage("Unexpected error: " + e);
             resp.sendRedirect("/");
         }
-    }
-
-    private String getRedirectUri(HttpServletRequest req) {
-        return req.getScheme() + "://" + req.getServerName() + ":" + req.getServerPort()
-                + req.getContextPath() + "/oauth2callback";
-    }
-
-    private UserSession getUserSession(HttpServletRequest req) {
-        return (UserSession) req.getSession().getAttribute("userSession");
     }
 }
