@@ -7,9 +7,12 @@ public class ServiceApplicationServer extends ApplicationServer {
     public ServiceApplicationServer(int port) {
         super(port);
     }
-    
+
     public static void main(String[] args) throws Exception {
-        new ServiceApplicationServer(12080).start();
+        ServiceApplicationServer server = new ServiceApplicationServer(12080);
+        server.addHandler(server.shutdownHandler());
+        server.addHandler(server.createWebAppContext("/"));
+        server.start();
     }
 
 }

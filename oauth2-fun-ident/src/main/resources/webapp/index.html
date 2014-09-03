@@ -41,7 +41,7 @@ $(function() {
 	var authenticatedTemplate = _.template($("#authenticatedTemplate").text());
 	var loginTemplate = _.template($("#loginTemplate").text());
 	var errorTemplate = _.template($("#errorTemplate").text());
-	$.getJSON("/userinfo", function(data) {
+	$.getJSON("userinfo", function(data) {
 		$("#username").text(data.username);
 
 		$("#providers").empty();

@@ -28,7 +28,7 @@
 $(function() {
 	var authenticatedTemplate = _.template($("#authenticatedTemplate").text());
 	var loginTemplate = _.template($("#loginTemplate").text());
-	$.getJSON("/userinfo", function(data) {
+	$.getJSON("userinfo", function(data) {
 		
 		$("#userinfo").empty();
 		if (data.username) {

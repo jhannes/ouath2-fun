@@ -1,18 +1,18 @@
 package com.johannesbrodwall.oauth2fun.lib;
 
+import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.HandlerList;
+import org.eclipse.jetty.server.handler.MovedContextHandler;
 import org.eclipse.jetty.server.handler.ShutdownHandler;
 import org.eclipse.jetty.webapp.Configuration;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.eclipse.jetty.webapp.WebInfConfiguration;
 import org.eclipse.jetty.webapp.WebXmlConfiguration;
 
+import java.net.URI;
 import java.net.URL;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 public class ApplicationServer {
 
     private Server server;
@@ -23,23 +23,28 @@ public class ApplicationServer {
         server.setHandler(handlers);
     }
 
-    public void start() throws Exception {
-        handlers.addHandler(shutdownHandler());
-        handlers.addHandler(createWebAppContext());
-        server.start();
-
-        log.info("Started " + server.getURI());
+    protected void addHandler(Handler handler) {
+        handlers.addHandler(handler);
     }
 
-    private WebAppContext createWebAppContext() {
+    public void start() throws Exception {
+        server.start();
+    }
+
+    protected URI getURI() {
+        return server.getURI();
+    }
+
+
+    protected WebAppContext createWebAppContext(String contextPath) {
         WebAppContext webapp = new WebAppContext();
-        webapp.setContextPath("/");
+        webapp.setContextPath(contextPath);
 
         URL webAppUrl = getClass().getResource("/webapp");
         if (webAppUrl.getProtocol().equals("jar")) {
             webapp.setWar(webAppUrl.toExternalForm());
         } else {
-            webapp.setWar("src/main/webapp");
+            webapp.setWar("src/main/resources/webapp");
             // Avoid locking static content when running exploded
             webapp.setInitParameter("org.eclipse.jetty.servlet.Default.useFileMappedBuffer", "false");
         }
@@ -49,8 +54,15 @@ public class ApplicationServer {
         return webapp;
     }
 
-    private ShutdownHandler shutdownHandler() {
+    protected ShutdownHandler shutdownHandler() {
         return new ShutdownHandler("sdgsdgs", false, true);
+    }
+
+    protected Handler createRedirectContextHandler(String contextPath, String server) {
+        MovedContextHandler contextHandler = new MovedContextHandler();
+        contextHandler.setContextPath(contextPath);
+        contextHandler.setNewContextURL(server);
+        return contextHandler;
     }
 
 }
