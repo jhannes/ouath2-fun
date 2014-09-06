@@ -34,7 +34,7 @@ public class OAuthProvider {
     }
 
     @SneakyThrows
-    private String getUrl(String redirectUrl) {
+    private String getAuthUrl(String redirectUrl) {
         if (getClientId() == null || getAuthUrl() == null) return null;
 
         return getAuthUrl() + "?"
@@ -78,7 +78,7 @@ public class OAuthProvider {
         result.set("providerName", getProviderName());
         result.set("displayName", getDisplayName());
         result.set("clientSignup", getClientSignup());
-        result.set("url", getUrl(redirectUri));
+        result.set("url", getAuthUrl(redirectUri));
         return result;
     }
 }

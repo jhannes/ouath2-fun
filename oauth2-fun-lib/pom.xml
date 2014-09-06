@@ -39,12 +39,6 @@
   </dependencies>
 
   <build>
-    <resources>
-      <resource>
-        <targetPath>webapp</targetPath>
-        <directory>${basedir}/src/main/webapp</directory>
-      </resource>
-    </resources>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
