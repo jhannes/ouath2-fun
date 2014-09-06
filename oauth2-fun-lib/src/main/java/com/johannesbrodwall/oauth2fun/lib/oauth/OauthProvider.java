@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 
-public class OAuthProvider {
+public class OauthProvider {
 
     private String getProperty(String property, String defaultValue) {
         return OauthConfiguration.getProperty("oauth2." + providerName + "." + property, defaultValue);
@@ -29,7 +29,10 @@ public class OAuthProvider {
     @Getter @Setter
     private String tokenUrl;
 
-    public OAuthProvider(String providerName) {
+    @Getter @Setter
+    private String profileUrl;
+
+    public OauthProvider(String providerName) {
         this.providerName = providerName;
     }
 
@@ -69,4 +72,5 @@ public class OAuthProvider {
         result.set("url", getAuthUrl(redirectUri));
         return result;
     }
+
 }

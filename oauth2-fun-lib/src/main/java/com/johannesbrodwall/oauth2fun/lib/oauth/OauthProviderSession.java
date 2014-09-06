@@ -14,17 +14,19 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class OauthProviderSession {
 
-    protected final OAuthProvider provider;
+    protected final OauthProvider provider;
 
     @Getter
     protected String username;
+
+    protected String fullName;
 
     @Setter
     private String errorMessage;
 
     protected String accessToken;
 
-    public OauthProviderSession(OAuthProvider provider) {
+    public OauthProviderSession(OauthProvider provider) {
         this.provider = provider;
     }
 
@@ -33,7 +35,7 @@ public class OauthProviderSession {
     }
 
     public void fetchAuthToken(String code, String redirectUri) throws IOException {
-        JsonObject tokenResponse = HttpUtils.executeJsonPostRequest(
+        JsonObject tokenResponse = HttpUtils.httpPostJson(
                 new URL(provider.getTokenUrl()),
                 provider.getTokenRequestPayload(code, redirectUri));
         String idToken = tokenResponse.get("id_token").asString();
@@ -45,14 +47,16 @@ public class OauthProviderSession {
     }
 
     public void fetchProfile() throws IOException {
+        JsonObject object = HttpUtils.httpGetWithToken(provider.getProfileUrl(), accessToken);
+        fullName = object.get("displayName").asString();
     }
-
 
     public JsonObject toJSON(String redirectUri) {
         JsonObject result = new JsonObject();
         result.set("provider", provider.toJSON(redirectUri));
         result.set("loggedIn", isLoggedIn());
         result.set("username", username);
+        result.set("name", fullName);
         if (errorMessage != null) {
             result.set("errorMessage", errorMessage);
             errorMessage = null;
@@ -61,19 +65,21 @@ public class OauthProviderSession {
     }
 
     public static OauthProviderSession createGoogleSession() {
-        OAuthProvider provider = new OAuthProvider("google");
+        OauthProvider provider = new OauthProvider("google");
         provider.setClientSignup("https://console.developers.google.com/project");
         provider.setAuthUrl("https://accounts.google.com/o/oauth2/auth");
         provider.setTokenUrl("https://accounts.google.com/o/oauth2/token");
+        provider.setProfileUrl("https://www.googleapis.com/plus/v1/people/me");
         provider.setScope("profile email");
         return new OauthProviderSession(provider);
     }
 
     public static OauthProviderSession createFacebookSession() {
-        OAuthProvider provider = new OAuthProvider("facebook");
+        OauthProvider provider = new OauthProvider("facebook");
         provider.setClientSignup("https://developers.facebook.com/");
         provider.setAuthUrl("https://www.facebook.com/dialog/oauth");
         provider.setTokenUrl("https://graph.facebook.com/oauth/access_token");
+        provider.setProfileUrl("https://graph.facebook.com/me");
         provider.setScope("email");
         return new FacebookOauthProviderSession(provider);
     }
