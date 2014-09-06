@@ -1,9 +1,11 @@
 package com.johannesbrodwall.oauth2fun.service;
 
-import org.slf4j.bridge.SLF4JBridgeHandler;
-
 import com.johannesbrodwall.oauth2fun.lib.ApplicationServer;
 
+import lombok.extern.slf4j.Slf4j;
+
+
+@Slf4j
 public class ServiceApplicationServer extends ApplicationServer {
 
     public ServiceApplicationServer(int port) {
@@ -11,12 +13,12 @@ public class ServiceApplicationServer extends ApplicationServer {
     }
 
     public static void main(String[] args) throws Exception {
-        SLF4JBridgeHandler.removeHandlersForRootLogger();
-        SLF4JBridgeHandler.install();
         ServiceApplicationServer server = new ServiceApplicationServer(12080);
         server.addHandler(server.shutdownHandler());
-        server.addHandler(server.createWebAppContext("/"));
+        server.addHandler(server.createWebAppContext("/service"));
         server.start();
+
+        log.info("Started " + server.getURI());
     }
 
 }

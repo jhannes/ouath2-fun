@@ -1,0 +1,51 @@
+<!doctype html>
+<html>
+<head>
+	<title>OAuth 2 Demo</title>
+	<style>
+.error { color: red; }
+	</style>
+</head>
+
+<body>
+	<h1>OAuth 2 login</h1>
+
+	<div id="contents"></div>
+	
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/html" id="authenticatedTemplate">
+Logged in as <%= username %> (<%= name %>)
+</script>
+<script type="text/html" id="loginTemplate">
+<form method='post' action='login'>
+	<input type="text" name="username" placeholder="Username" />
+	<input type="password" name="password" placeholder="Password" />
+	<input type="submit" value="Login" />
+</form>
+</script>
+<script type="text/html" id="errorTemplate">
+Error: <%= errorMessage %>
+</script>
+    <script>
+$(function() {
+	var authenticatedTemplate = _.template($("#authenticatedTemplate").text());
+	var loginTemplate = _.template($("#loginTemplate").text());
+	var errorTemplate = _.template($("#errorTemplate").text());
+	$.getJSON("userinfo", function(data) {
+		$("#contents").empty();
+		if (data.user) {
+			$("#contents").append(authenticatedTemplate(data.user));
+		} else {
+			$("#contents").append(loginTemplate());
+		}
+		
+		if (data.error) {
+			$("#contents").append(data.error)
+		}
+	});
+});
+    </script>
+</body>
+</html>
