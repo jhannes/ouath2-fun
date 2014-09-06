@@ -5,6 +5,7 @@ import com.eclipsesource.json.JsonObject;
 import java.net.URLEncoder;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.SneakyThrows;
 
 public class OAuthProvider {
@@ -13,24 +14,23 @@ public class OAuthProvider {
         return OauthConfiguration.getProperty("oauth2." + providerName + "." + property, defaultValue);
     }
 
-    private String getRequiredProperty(String property) {
-        return OauthConfiguration.getRequiredProperty("oauth2." + providerName + "." + property);
-    }
-
-
     @Getter
     private String providerName;
 
-    OAuthProvider(String providerName) {
+    @Getter @Setter
+    private String clientSignup;
+
+    @Getter @Setter
+    private String scope;
+
+    @Getter @Setter
+    private String authUrl;
+
+    @Getter @Setter
+    private String tokenUrl;
+
+    public OAuthProvider(String providerName) {
         this.providerName = providerName;
-    }
-
-    public String getDisplayName() {
-        return getProperty("displayName", providerName);
-    }
-
-    public String getClientSignup() {
-        return getProperty("clientSignup", null);
     }
 
     @SneakyThrows
@@ -45,24 +45,12 @@ public class OAuthProvider {
             + "state=" + providerName;
     }
 
-    private String getScope() {
-        return getProperty("scope", "profile");
-    }
-
     private String getClientId() {
         return getProperty("clientId", null);
     }
 
     private String getClientSecret() {
         return getProperty("clientSecret", null);
-    }
-
-    private String getAuthUrl() {
-        return getProperty("authUrl", null);
-    }
-
-    public String getTokenUrl() {
-        return getRequiredProperty("tokenUrl");
     }
 
     String getTokenRequestPayload(String code, String redirectUri) {
@@ -76,7 +64,7 @@ public class OAuthProvider {
     JsonObject toJSON(String redirectUri) {
         JsonObject result = new JsonObject();
         result.set("providerName", getProviderName());
-        result.set("displayName", getDisplayName());
+        result.set("displayName", providerName);
         result.set("clientSignup", getClientSignup());
         result.set("url", getAuthUrl(redirectUri));
         return result;

@@ -2,7 +2,6 @@ package com.johannesbrodwall.oauth2fun.ident;
 
 import com.eclipsesource.json.JsonArray;
 import com.eclipsesource.json.JsonObject;
-import com.johannesbrodwall.oauth2fun.lib.oauth.FacebookOauthProviderSession;
 import com.johannesbrodwall.oauth2fun.lib.oauth.OauthProviderSession;
 
 import java.util.HashMap;
@@ -20,8 +19,8 @@ public class UserSession {
     private OauthClientSession pendingClientSession;
 
     public UserSession() {
-        providerSessions.put("google", new OauthProviderSession("google"));
-        providerSessions.put("facebook", new FacebookOauthProviderSession());
+        providerSessions.put("google", OauthProviderSession.createGoogleSession());
+        providerSessions.put("facebook", OauthProviderSession.createFacebookSession());
     }
 
     public JsonObject toJSON(String redirectUri) {

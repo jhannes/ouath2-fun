@@ -9,10 +9,9 @@ import java.util.Map;
 
 public class FacebookOauthProviderSession extends OauthProviderSession {
 
-    public FacebookOauthProviderSession() {
-        super("facebook");
+    FacebookOauthProviderSession(OAuthProvider provider) {
+        super(provider);
     }
-
 
     @Override
     public void fetchAuthToken(String code, String redirectUri) throws IOException {

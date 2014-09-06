@@ -24,8 +24,8 @@ public class OauthProviderSession {
 
     protected String accessToken;
 
-    public OauthProviderSession(String providerName) {
-        provider = new OAuthProvider(providerName);
+    public OauthProviderSession(OAuthProvider provider) {
+        this.provider = provider;
     }
 
     public boolean isLoggedIn() {
@@ -58,5 +58,23 @@ public class OauthProviderSession {
             errorMessage = null;
         }
         return result;
+    }
+
+    public static OauthProviderSession createGoogleSession() {
+        OAuthProvider provider = new OAuthProvider("google");
+        provider.setClientSignup("https://console.developers.google.com/project");
+        provider.setAuthUrl("https://accounts.google.com/o/oauth2/auth");
+        provider.setTokenUrl("https://accounts.google.com/o/oauth2/token");
+        provider.setScope("profile email");
+        return new OauthProviderSession(provider);
+    }
+
+    public static OauthProviderSession createFacebookSession() {
+        OAuthProvider provider = new OAuthProvider("facebook");
+        provider.setClientSignup("https://developers.facebook.com/");
+        provider.setAuthUrl("https://www.facebook.com/dialog/oauth");
+        provider.setTokenUrl("https://graph.facebook.com/oauth/access_token");
+        provider.setScope("email");
+        return new FacebookOauthProviderSession(provider);
     }
 }
