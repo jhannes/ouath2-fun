@@ -23,6 +23,17 @@ public class Oauth2CallbackServlet extends HttpServlet {
         UserSession userSession = ServletUtils.getSessionObject(UserSession.class, req);
         OauthProviderSession providerSession = userSession.getProviderSessions().get(req.getParameter("state"));
 
+        if (req.getParameter("error_message") != null) {
+            providerSession.setErrorMessage(req.getParameter("error_message"));
+            resp.sendRedirect("/");
+            return;
+        }
+        if (req.getParameter("error") != null) {
+            providerSession.setErrorMessage(req.getParameter("error"));
+            resp.sendRedirect("/");
+            return;
+        }
+
         try {
             String redirectUri = ServletUtils.getContextUrl(req) + "/oauth2callback";
             providerSession.fetchAuthToken(req.getParameter("code"), redirectUri);
