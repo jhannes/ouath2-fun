@@ -1,6 +1,7 @@
 package com.johannesbrodwall.oauth2fun.ident.web;
 
-import com.eclipsesource.json.JsonObject;
+import org.json.JSONObject;
+
 import com.johannesbrodwall.oauth2fun.ident.UserSession;
 import com.johannesbrodwall.oauth2fun.lib.ServletUtils;
 
@@ -49,17 +50,17 @@ public class OauthProviderServlet extends HttpServlet {
         UserSession userSession = startedSessions.get(code + clientId);
         userSession.getClientSession(clientId).redeemCode(code);
 
-        JsonObject idToken = new JsonObject();
-        idToken.set("email", userSession.getEmail());
+        JSONObject idToken = new JSONObject()
+            .put("email", userSession.getEmail());
 
-        JsonObject response = new JsonObject();
-        response.set("id_token", "a." + Base64.getEncoder().encodeToString(idToken.toString().getBytes())
+        JSONObject response = new JSONObject();
+        response.put("id_token", "a." + Base64.getEncoder().encodeToString(idToken.toString().getBytes())
              + ".dsgsg");
-        response.set("access_token", userSession.getClientSession(clientId).getAccessToken());
+        response.put("access_token", userSession.getClientSession(clientId).getAccessToken());
 
         resp.setContentType("text/json");
         try (PrintWriter writer = resp.getWriter()) {
-            response.writeTo(writer);
+            writer.write(response.toString());
         }
     }
 

@@ -19,7 +19,7 @@ public class UserinfoServlet extends HttpServlet {
         UserSession userSession = ServletUtils.getSessionObject(UserSession.class, req);
         try (PrintWriter writer = resp.getWriter()) {
             String redirectUri = ServletUtils.getContextUrl(req) + "/oauth2callback";
-            userSession.toJSON(redirectUri).writeTo(writer);
+            writer.write(userSession.toJSON(redirectUri).toString());
         }
         resp.setContentType("application/json");
     }

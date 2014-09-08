@@ -1,6 +1,6 @@
 package com.johannesbrodwall.oauth2fun.service;
 
-import com.eclipsesource.json.JsonObject;
+import org.json.JSONObject;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,9 +10,9 @@ public class LoginSession {
     @Getter @Setter
     private String username;
 
-    JsonObject toJSON() {
-        return new JsonObject()
-            .set("username", username)
-            .set("name", username);
+    JSONObject toJSON() {
+        return new JSONObject()
+            .put("username", username)
+            .put("name", username);
     }
 }

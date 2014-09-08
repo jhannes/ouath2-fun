@@ -1,6 +1,7 @@
 package com.johannesbrodwall.oauth2fun.lib.oauth;
 
-import com.eclipsesource.json.JsonObject;
+import org.json.JSONObject;
+
 import com.johannesbrodwall.oauth2fun.lib.HttpUtils;
 
 import java.io.IOException;
@@ -35,19 +36,19 @@ public class OauthProviderSession {
     }
 
     public void fetchAuthToken(String code, String redirectUri) throws IOException {
-        JsonObject tokenResponse = HttpUtils.httpPostJson(
+        JSONObject tokenResponse = HttpUtils.httpPostJson(
                 new URL(provider.getTokenUrl()),
                 provider.getTokenRequestPayload(code, redirectUri));
         parseToken(tokenResponse);
     }
 
-    private void parseToken(JsonObject tokenResponse) {
-        String idToken = tokenResponse.get("id_token").asString();
+    private void parseToken(JSONObject tokenResponse) {
+        String idToken = tokenResponse.getString("id_token");
         String idTokenPayload = base64Decode(idToken.split("\\.")[1]);
         log.info("ID token: {}", idTokenPayload);
-        JsonObject payload = JsonObject.readFrom(idTokenPayload);
-        username = payload.get("email").asString();
-        accessToken = tokenResponse.get("access_token").asString();
+        JSONObject payload = new JSONObject(idTokenPayload);
+        username = payload.getString("email");
+        accessToken = tokenResponse.getString("access_token");
     }
 
     private String base64Decode(String jwt) {
@@ -55,21 +56,17 @@ public class OauthProviderSession {
     }
 
     public void fetchProfile() throws IOException {
-        JsonObject object = HttpUtils.httpGetWithToken(provider.getProfileUrl(), accessToken);
-        fullName = object.get("displayName").asString();
+        JSONObject object = HttpUtils.httpGetWithToken(provider.getProfileUrl(), accessToken);
+        fullName = object.getString("displayName");
     }
 
-    public JsonObject toJSON(String redirectUri) {
-        JsonObject result = new JsonObject();
-        result.set("provider", provider.toJSON(redirectUri));
-        result.set("loggedIn", isLoggedIn());
-        result.set("username", username);
-        result.set("name", fullName);
-        if (errorMessage != null) {
-            result.set("errorMessage", errorMessage);
-            errorMessage = null;
-        }
-        return result;
+    public JSONObject toJSON(String redirectUri) {
+        return new JSONObject()
+            .put("provider", provider.toJSON(redirectUri))
+            .put("loggedIn", isLoggedIn())
+            .put("username", username)
+            .put("name", fullName)
+            .put("errorMessage", errorMessage);
     }
 
     public static OauthProviderSession createGoogleSession() {

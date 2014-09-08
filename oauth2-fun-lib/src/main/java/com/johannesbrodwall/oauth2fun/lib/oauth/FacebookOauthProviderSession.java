@@ -1,6 +1,7 @@
 package com.johannesbrodwall.oauth2fun.lib.oauth;
 
-import com.eclipsesource.json.JsonObject;
+import org.json.JSONObject;
+
 import com.johannesbrodwall.oauth2fun.lib.HttpUtils;
 
 import java.io.IOException;
@@ -25,10 +26,10 @@ class FacebookOauthProviderSession extends OauthProviderSession {
     @Override
     public void fetchProfile() throws IOException {
         String requestUrl = provider.getProfileUrl() + "?access_token=" + accessToken;
-        JsonObject object = HttpUtils.httpGetJson(requestUrl);
-        username = object.get("email").asString();
-        String firstName = object.get("first_name").asString();
-        String lastName = object.get("last_name").asString();
+        JSONObject object = HttpUtils.httpGetJson(requestUrl);
+        username = object.getString("email");
+        String firstName = object.getString("first_name");
+        String lastName = object.getString("last_name");
         fullName = firstName + " " + lastName;
     }
 

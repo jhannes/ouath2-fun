@@ -1,6 +1,6 @@
 package com.johannesbrodwall.oauth2fun.lib.oauth;
 
-import com.eclipsesource.json.JsonObject;
+import org.json.JSONObject;
 
 import java.net.URLEncoder;
 
@@ -67,14 +67,13 @@ public class OauthProvider {
                 + "&grant_type=authorization_code");
     }
 
-    JsonObject toJSON(String redirectUri) {
-        JsonObject result = new JsonObject();
-        result.set("providerName", getProviderName());
-        result.set("displayName", providerName);
-        result.set("clientSignup", getClientSignup());
-        result.set("url", getAuthUrl(redirectUri));
-        result.set("signupImg", signupPicture);
-        return result;
+    JSONObject toJSON(String redirectUri) {
+        return new JSONObject()
+            .put("providerName", getProviderName())
+            .put("displayName", providerName)
+            .put("clientSignup", getClientSignup())
+            .put("url", getAuthUrl(redirectUri))
+            .put("signupImg", signupPicture);
     }
 
 }

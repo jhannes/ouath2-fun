@@ -1,6 +1,7 @@
 package com.johannesbrodwall.oauth2fun.client;
 
-import com.eclipsesource.json.JsonObject;
+import org.json.JSONObject;
+
 import com.johannesbrodwall.oauth2fun.lib.oauth.OauthProvider;
 import com.johannesbrodwall.oauth2fun.lib.oauth.OauthProviderSession;
 
@@ -17,7 +18,7 @@ public class ClientUserSession {
         return new OauthProviderSession(provider);
     }
 
-    public JsonObject toJSON(String redirectUri) {
+    public JSONObject toJSON(String redirectUri) {
         return providerSession.toJSON(redirectUri);
     }
 

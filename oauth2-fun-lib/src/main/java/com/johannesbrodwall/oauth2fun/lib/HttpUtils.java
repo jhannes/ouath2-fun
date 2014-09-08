@@ -1,6 +1,6 @@
 package com.johannesbrodwall.oauth2fun.lib;
 
-import com.eclipsesource.json.JsonObject;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class HttpUtils {
 
-    public static JsonObject httpPostJson(URL requestUrl, String payload) throws IOException {
+    public static JSONObject httpPostJson(URL requestUrl, String payload) throws IOException {
         log.info("{}\n\tRequest:{}", requestUrl, payload);
 
         HttpURLConnection connection = (HttpURLConnection) requestUrl.openConnection();
@@ -32,7 +32,7 @@ public class HttpUtils {
             try (InputStream inputStream = connection.getInputStream() ) {
                 String response = slurp(inputStream);
                 log.info("{}\n\tResponse:{}", requestUrl, response);
-                return JsonObject.readFrom(response);
+                return new JSONObject(response);
             }
         } else {
             try (InputStream inputStream = connection.getErrorStream() ) {
@@ -41,8 +41,8 @@ public class HttpUtils {
         }
     }
 
-    public static JsonObject httpGetJson(String requestUrl) throws IOException {
-        return JsonObject.readFrom(httpGetString(requestUrl));
+    public static JSONObject httpGetJson(String requestUrl) throws IOException {
+        return new JSONObject(httpGetString(requestUrl));
     }
 
     public static String httpGetString(String requestUrl) throws IOException {
@@ -78,7 +78,7 @@ public class HttpUtils {
             .get();
     }
 
-    public static JsonObject httpGetWithToken(String requestUrl, String accessToken) throws IOException {
+    public static JSONObject httpGetWithToken(String requestUrl, String accessToken) throws IOException {
         log.info(requestUrl.toString());
         HttpURLConnection connection = (HttpURLConnection) new URL(requestUrl).openConnection();
         connection.setRequestMethod("GET");
@@ -87,7 +87,7 @@ public class HttpUtils {
             try (InputStream inputStream = connection.getInputStream() ) {
                 String response = slurp(inputStream);
                 log.info("{}\n\tResponse:{}", requestUrl, response);
-                return JsonObject.readFrom(response);
+                return new JSONObject(response);
             }
         } else {
             try (InputStream inputStream = connection.getErrorStream() ) {
