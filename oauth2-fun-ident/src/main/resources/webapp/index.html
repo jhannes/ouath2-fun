@@ -31,7 +31,14 @@
 </li>
 </script>
 <script type="text/html" id="loginTemplate">
-<li>Not logged in: <%= displayName %>: <a href="<%= url %>">Login</a></li></li>
+<% if (signupImg) { %>
+	<a href="<%= url %>">
+	<img src="<%= signupImg %>" alt="Login with <%= displayName %>" width="200" />
+	</a>
+	<br/>
+<% } else { %>
+	<li>Not logged in: <%= displayName %>: <a href="<%= url %>">Login</a></li></li>
+<% } %>
 </script>
 <script type="text/html" id="errorTemplate">
 <li class="error">Error: <%= errorMessage %></li></li>
