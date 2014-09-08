@@ -10,7 +10,7 @@ public class LoginSession {
     @Getter @Setter
     private String username;
 
-    public JsonObject toJSON() {
+    JsonObject toJSON() {
         return new JsonObject()
             .set("username", username)
             .set("name", username);

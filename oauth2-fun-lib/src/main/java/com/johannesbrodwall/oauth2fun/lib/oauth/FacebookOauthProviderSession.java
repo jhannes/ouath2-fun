@@ -6,7 +6,7 @@ import com.johannesbrodwall.oauth2fun.lib.HttpUtils;
 import java.io.IOException;
 import java.util.Map;
 
-public class FacebookOauthProviderSession extends OauthProviderSession {
+class FacebookOauthProviderSession extends OauthProviderSession {
 
     FacebookOauthProviderSession(OauthProvider provider) {
         super(provider);

@@ -14,14 +14,6 @@ import lombok.extern.slf4j.Slf4j;
         file = new File(filename);
     }
 
-    static String getRequiredProperty(String propertyName) {
-        String result = instance.getProperty(propertyName);
-        if (result == null) {
-            throw new RuntimeException("Missing property " + propertyName);
-        }
-        return result;
-    }
-
     static String getProperty(String propertyName, String defaultValue) {
         String result = instance.getProperty(propertyName);
         if (result == null) {
