@@ -38,12 +38,20 @@ public class OauthProviderSession {
         JsonObject tokenResponse = HttpUtils.httpPostJson(
                 new URL(provider.getTokenUrl()),
                 provider.getTokenRequestPayload(code, redirectUri));
+        parseToken(tokenResponse);
+    }
+
+    private void parseToken(JsonObject tokenResponse) {
         String idToken = tokenResponse.get("id_token").asString();
-        String idTokenPayload = new String(Base64.getDecoder().decode(idToken.split("\\.")[1]));
+        String idTokenPayload = base64Decode(idToken.split("\\.")[1]);
         log.info("ID token: {}", idTokenPayload);
         JsonObject payload = JsonObject.readFrom(idTokenPayload);
         username = payload.get("email").asString();
         accessToken = tokenResponse.get("access_token").asString();
+    }
+
+    private String base64Decode(String jwt) {
+        return new String(Base64.getDecoder().decode(jwt));
     }
 
     public void fetchProfile() throws IOException {
@@ -70,6 +78,7 @@ public class OauthProviderSession {
         provider.setAuthUrl("https://accounts.google.com/o/oauth2/auth");
         provider.setTokenUrl("https://accounts.google.com/o/oauth2/token");
         provider.setProfileUrl("https://www.googleapis.com/plus/v1/people/me");
+        provider.setSignupPicture("sign-in-with-google.png");
         provider.setScope("profile email");
         return new OauthProviderSession(provider);
     }
@@ -80,6 +89,7 @@ public class OauthProviderSession {
         provider.setAuthUrl("https://www.facebook.com/dialog/oauth");
         provider.setTokenUrl("https://graph.facebook.com/oauth/access_token");
         provider.setProfileUrl("https://graph.facebook.com/me");
+        provider.setSignupPicture("login-facebook.png");
         provider.setScope("email");
         return new FacebookOauthProviderSession(provider);
     }

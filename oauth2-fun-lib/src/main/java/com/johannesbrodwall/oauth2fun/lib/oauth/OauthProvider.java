@@ -18,6 +18,9 @@ public class OauthProvider {
     private String providerName;
 
     @Getter @Setter
+    private String signupPicture;
+
+    @Getter @Setter
     private String clientSignup;
 
     @Getter @Setter
@@ -40,12 +43,12 @@ public class OauthProvider {
     private String getAuthUrl(String redirectUrl) {
         if (getClientId() == null || getAuthUrl() == null) return null;
 
-        return getAuthUrl() + "?"
-            + "response_type=code&"
-            + "client_id=" + getClientId() + "&"
-            + "redirect_uri=" + URLEncoder.encode(redirectUrl, "UTF-8") + "&"
-            + "scope=" + getScope() + "&"
-            + "state=" + providerName;
+        return getAuthUrl()
+            + "?response_type=code"
+            + "&client_id=" + getClientId()
+            + "&redirect_uri=" + URLEncoder.encode(redirectUrl, "UTF-8")
+            + "&scope=" + getScope()
+            + "&state=" + providerName;
     }
 
     private String getClientId() {
@@ -57,11 +60,11 @@ public class OauthProvider {
     }
 
     String getTokenRequestPayload(String code, String redirectUri) {
-        return ("code=" + code + "&"
-                + "client_id=" + getClientId() + "&"
-                + "client_secret=" + getClientSecret() + "&"
-                + "redirect_uri=" + redirectUri + "&"
-                + "grant_type=authorization_code");
+        return ("code=" + code
+                + "&client_id=" + getClientId()
+                + "&client_secret=" + getClientSecret()
+                + "&redirect_uri=" + redirectUri
+                + "&grant_type=authorization_code");
     }
 
     JsonObject toJSON(String redirectUri) {
@@ -70,6 +73,7 @@ public class OauthProvider {
         result.set("displayName", providerName);
         result.set("clientSignup", getClientSignup());
         result.set("url", getAuthUrl(redirectUri));
+        result.set("signupImg", signupPicture);
         return result;
     }
 
