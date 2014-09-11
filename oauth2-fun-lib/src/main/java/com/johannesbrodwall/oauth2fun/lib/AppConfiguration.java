@@ -21,7 +21,7 @@ public class AppConfiguration {
         return properties.getProperty(propertyName);
     }
 
-    private void ensureConfigurationIsFresh() {
+    private synchronized void ensureConfigurationIsFresh() {
         if (System.currentTimeMillis() < nextCheckTime) return;
         nextCheckTime = System.currentTimeMillis() + 10000;
         log.trace("Rechecking {}", file);
